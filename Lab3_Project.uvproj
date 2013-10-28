@@ -435,12 +435,7 @@
             <File>
               <FileName>lab3_accelerometer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_accelerometer.c</FilePath>
-            </File>
-            <File>
-              <FileName>lab3_accelerometer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\lab3_accelerometer.h</FilePath>
+              <FilePath>.\src\lab3_accelerometer.c</FilePath>
             </File>
           </Files>
         </Group>
