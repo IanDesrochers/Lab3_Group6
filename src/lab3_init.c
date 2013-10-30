@@ -28,7 +28,7 @@ void init_TIM2() {
   NVIC_InitTypeDef NVIC_InitStructure;																								//
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;																			//
 	
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE); 																							//Enable clock to TIM4
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE); 																							//Enable clock to TIM2
 	
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;																										//no clock division
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Down;																			//count down

@@ -5,6 +5,7 @@
 
 #include "lab3_init.h"
 #include "lab3_accelerometer.h"
+#include "lab3_filter.h"
 
 #define THRESHOLD 4
 
@@ -21,6 +22,9 @@ int main()
 {
 	//Struct to hold orientation data from accelerometer
 	struct Orientation orientation;
+	struct Moving_Average moving_average_pitch;
+	struct Moving_Average moving_average_roll;
+	
 	//Variables
 	uint8_t x_positive_speed, x_negative_speed, y_positive_speed, y_negative_speed;
 	uint8_t x_positive_count, x_negative_count, y_positive_count, y_negative_count;
@@ -35,6 +39,10 @@ int main()
 	init_EXTI();
 	init_TIM4_PWM();
 	init_TIM5();
+	
+	//Struct Initialization
+	init_moving_average(&moving_average_pitch, MOVING_AVERAGE_FILTER_SIZE);
+	init_moving_average(&moving_average_roll, MOVING_AVERAGE_FILTER_SIZE);
 	
 	while(1) {
 		//if (!mode) {
@@ -57,8 +65,15 @@ int main()
 			if (tim2_interrupt!=0) {
 				tim2_interrupt=0;
 				getOrientation(&orientation);
-				//printf("%f\t%f\t%f\n", orientation.pitch, orientation.roll, orientation.yaw);
+				insert_value(&moving_average_pitch,orientation.pitch);
+				insert_value(&moving_average_roll,orientation.roll);
+
+				calculate_average(&moving_average_pitch);
+				calculate_average(&moving_average_pitch);
+				
+				printf("%f\t%f\t%f\n", orientation.pitch, orientation.roll, orientation.yaw);
 			}
+			
 			if (tim3_interrupt!=0) {
 				tim3_interrupt=0;
 				if (x_positive_count==x_positive_speed) {
@@ -128,11 +143,8 @@ int main()
 				TIM4->CCR3 = pwm_intensity;
 				TIM4->CCR4 = pwm_intensity;
 			}
-		}
-					
+		}			
 	}
-	
-	
 }
 
 void TIM2_IRQHandler(void)																									//

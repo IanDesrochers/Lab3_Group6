@@ -8,5 +8,7 @@ struct Orientation {
 	float yaw;
 };
 
+
+
 void getOrientation(struct Orientation *orientation);
 void init_accel(void);
