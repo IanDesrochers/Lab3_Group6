@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "stm32f4xx.h"
 #include "stm32f4xx_conf.h"
 #include "stm32f4_discovery_lis302dl.h"
@@ -8,6 +9,7 @@
 #include "lab3_filter.h"
 
 #define THRESHOLD 4
+#define PI 3.14159f
 
 //Define required offsets as well, post calibration
 static uint32_t tim2_interrupt = 0;
@@ -29,7 +31,8 @@ int main()
 	uint8_t x_positive_speed, x_negative_speed, y_positive_speed, y_negative_speed;
 	uint8_t x_positive_count, x_negative_count, y_positive_count, y_negative_count;
 	uint8_t tim3_interrupt_count;
-	uint32_t pwm_intensity, pwm_direction, max_pwm_intensity = 100;
+	uint32_t pwm_intensity, pwm_direction, max_pwm_intensity = MAX_PWM_INTENSITY;
+	float real_pwm_intensity;
 	
 	//Calls to initialize used peripherals
 	init_TIM2();
@@ -94,6 +97,7 @@ int main()
 				y_negative_count++;
 				
 				if (tim3_interrupt_count==89) {
+					//printf("%d\t%d\t%d\t%d\n", x_positive_speed, x_negative_speed, y_positive_speed, y_negative_speed);
 					tim3_interrupt_count=0;
 					x_positive_count=0;
 					x_negative_count=0;
@@ -127,7 +131,6 @@ int main()
 		} else {
 			if (tim5_interrupt!=0) {
 				tim5_interrupt = 0;
-				printf("A\n");
 				if (pwm_intensity == max_pwm_intensity) {
 					pwm_direction = 1;
 				} else if (pwm_intensity == 0) {
@@ -138,10 +141,11 @@ int main()
 				} else {
 					pwm_intensity++;
 				}
-				TIM4->CCR1 = pwm_intensity;
-				TIM4->CCR2 = pwm_intensity;
-				TIM4->CCR3 = pwm_intensity;
-				TIM4->CCR4 = pwm_intensity;
+				real_pwm_intensity = max_pwm_intensity * pow(0.5f*(-cos(2*PI*(float)pwm_intensity / max_pwm_intensity)+1), 2);
+				TIM_SetCompare1(TIM4, real_pwm_intensity);
+				TIM_SetCompare2(TIM4, real_pwm_intensity);
+				TIM_SetCompare3(TIM4, real_pwm_intensity);
+				TIM_SetCompare4(TIM4, real_pwm_intensity);
 			}
 		}			
 	}

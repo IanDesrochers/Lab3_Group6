@@ -133,8 +133,8 @@ void init_TIM4_PWM() {
 	
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	
-	TIM_TimeBaseStructure.TIM_Period = 0x63;
-	TIM_TimeBaseStructure.TIM_Prescaler = 0x00FF;
+	TIM_TimeBaseStructure.TIM_Period = MAX_PWM_INTENSITY;
+	TIM_TimeBaseStructure.TIM_Prescaler = 0x00FF * 100 / TIM_TimeBaseStructure.TIM_Period;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -142,7 +142,7 @@ void init_TIM4_PWM() {
 
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_Pulse = 50;
+	TIM_OCInitStructure.TIM_Pulse = 0;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 
 	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
@@ -169,7 +169,7 @@ void init_TIM5() {
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;																											//no clock division
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Down;																				//counts down
 	TIM_TimeBaseStructure.TIM_Period = 0x0FFF;																													//max period available (2^16-1)
-	TIM_TimeBaseStructure.TIM_Prescaler = (SystemCoreClock/(2*50*TIM_TimeBaseStructure.TIM_Period))-1;		//set prescaler
+	TIM_TimeBaseStructure.TIM_Prescaler = (SystemCoreClock/(2*50*TIM_TimeBaseStructure.TIM_Period*MAX_PWM_INTENSITY/100))-1;		//set prescaler
 	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0x0;																									//restart RCR count after counting down to this value
 	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);				//****************************************		//initialize struct parameters to TIM3
 	

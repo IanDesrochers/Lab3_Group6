@@ -5,3 +5,5 @@ void init_EXTI(void);
 void init_TIM4_PWM(void);
 void init_LED_PWM(void);
 void init_TIM5(void);
+
+#define MAX_PWM_INTENSITY 1000
