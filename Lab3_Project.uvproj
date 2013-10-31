@@ -423,34 +423,24 @@
               <FilePath>.\src\system_stm32f4xx.c</FilePath>
             </File>
             <File>
-              <FileName>lab3_init.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\lab3_init.h</FilePath>
-            </File>
-            <File>
               <FileName>lab3_init.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\lab3_init.c</FilePath>
             </File>
             <File>
-              <FileName>lab3_accelerometer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\lab3_accelerometer.c</FilePath>
-            </File>
-            <File>
-              <FileName>lab3_accelerometer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\lab3_accelerometer.h</FilePath>
-            </File>
-            <File>
-              <FileName>lab3_filter.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\lab3_filter.h</FilePath>
-            </File>
-            <File>
               <FileName>lab3_filter.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\lab3_filter.c</FilePath>
+            </File>
+            <File>
+              <FileName>lab3_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\lab3_pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>lab3_orientation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\lab3_orientation.c</FilePath>
             </File>
           </Files>
         </Group>

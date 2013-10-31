@@ -20,7 +20,7 @@
   * @{
   */ 
 #ifndef MOVING_AVERAGE_FILTER_SIZE
-#define MOVING_AVERAGE_FILTER_SIZE 5																				//Size of moving average circular filter window
+#define MOVING_AVERAGE_FILTER_SIZE 10																				//Size of moving average circular filter window
 #endif
 
 
@@ -45,7 +45,7 @@ struct Moving_Average {
   * @{
   */ 
 
-void init_moving_average(struct Moving_Average *moving_average, uint32_t);
+void init_moving_average(struct Moving_Average *moving_average);
 void insert_value(struct Moving_Average *moving_average, float new_value);
 void calculate_average(struct Moving_Average *moving_average);
 

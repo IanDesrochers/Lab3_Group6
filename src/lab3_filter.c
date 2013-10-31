@@ -26,7 +26,7 @@
 	* @param  size: Length of moving average array
   * @retval None
   */
-void init_moving_average(struct Moving_Average *moving_average, uint32_t size) {
+void init_moving_average(struct Moving_Average *moving_average) {
 	moving_average->index = 0;																																									//Initialize all struct members to 0
 	moving_average->average = 0;
 	uint32_t i;

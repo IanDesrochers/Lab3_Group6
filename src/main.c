@@ -5,149 +5,88 @@
 #include "stm32f4_discovery_lis302dl.h"
 
 #include "lab3_init.h"
-#include "lab3_accelerometer.h"
 #include "lab3_filter.h"
-
-#define THRESHOLD 4
-#define PI 3.14159f
+#include "lab3_pwm.h"
+#include "lab3_orientation.h"
 
 //Define required offsets as well, post calibration
 static uint32_t tim2_interrupt = 0;
-static uint32_t tim3_interrupt = 0;
 static uint32_t tim5_interrupt = 0;
-static uint32_t exti_interrupt = 0;
 static uint32_t tap_interrupt = 0;
 static uint32_t mode = 0;
-static uint32_t is_initialized = 1;
+
+void change_mode(void);
+void display_orientation(struct Orientation *orientation);
 
 int main()
 {
 	//Struct to hold orientation data from accelerometer
 	struct Orientation orientation;
-	struct Moving_Average moving_average_pitch;
-	struct Moving_Average moving_average_roll;
-	
-	//Variables
-	uint8_t x_positive_speed, x_negative_speed, y_positive_speed, y_negative_speed;
-	uint8_t x_positive_count, x_negative_count, y_positive_count, y_negative_count;
-	uint8_t tim3_interrupt_count;
-	uint32_t pwm_intensity, pwm_direction, max_pwm_intensity = MAX_PWM_INTENSITY;
-	float real_pwm_intensity;
+	struct LED_PWM led_pwm_1, led_pwm_2, led_pwm_3, led_pwm_4;
 	
 	//Calls to initialize used peripherals
-	init_TIM2();
-	init_TIM3();
-	init_accel();
-	init_leds();
+	init_PWM();
+	init_accelerometer();
 	init_EXTI();
-	init_TIM4_PWM();
-	init_TIM5();
+	init_TIM2();
 	
 	//Struct Initialization
-	init_moving_average(&moving_average_pitch, MOVING_AVERAGE_FILTER_SIZE);
-	init_moving_average(&moving_average_roll, MOVING_AVERAGE_FILTER_SIZE);
+	init_orientation(&orientation);
+	init_LED_PWM(&led_pwm_1, MAX_PWM_INTENSITY);
+	init_LED_PWM(&led_pwm_2, MAX_PWM_INTENSITY);
+	init_LED_PWM(&led_pwm_3, MAX_PWM_INTENSITY);
+	init_LED_PWM(&led_pwm_4, MAX_PWM_INTENSITY);
 	
 	while(1) {
-		//if (!mode) {
 		if (tap_interrupt!=0) {
 			tap_interrupt = 0;
-			if (mode) {
-				mode = 0;
-				init_leds();
-			} else {
-				mode = 1;
-				init_LED_PWM();
-				//init_TIM4_PWM();
-			}
+			change_mode();
 		}
-		if (!mode) {
-			if (!is_initialized) {
-				init_leds();
-				is_initialized = 1;
-			}
-			if (tim2_interrupt!=0) {
-				tim2_interrupt=0;
-				getOrientation(&orientation);
-				insert_value(&moving_average_pitch,orientation.pitch);
-				insert_value(&moving_average_roll,orientation.roll);
-
-				calculate_average(&moving_average_pitch);
-				calculate_average(&moving_average_pitch);
-				
-				printf("%f\t%f\t%f\n", orientation.pitch, orientation.roll, orientation.yaw);
-			}
-			
-			if (tim3_interrupt!=0) {
-				tim3_interrupt=0;
-				if (x_positive_count==x_positive_speed) {
-					GPIO_ToggleBits(GPIOD, GPIO_Pin_15);
-				}
-				if (x_negative_count==x_negative_speed) {
-					GPIO_ToggleBits(GPIOD, GPIO_Pin_13);
-				}
-				if (y_positive_count==y_positive_speed) {
-					GPIO_ToggleBits(GPIOD, GPIO_Pin_14);
-				}
-				if (y_negative_count==y_negative_speed) {
-					GPIO_ToggleBits(GPIOD, GPIO_Pin_12);
-				}
-				x_positive_count++;
-				x_negative_count++;
-				y_positive_count++;
-				y_negative_count++;
-				
-				if (tim3_interrupt_count==89) {
-					//printf("%d\t%d\t%d\t%d\n", x_positive_speed, x_negative_speed, y_positive_speed, y_negative_speed);
-					tim3_interrupt_count=0;
-					x_positive_count=0;
-					x_negative_count=0;
-					y_positive_count=0;
-					y_negative_count=0;
-					if (orientation.pitch>=0) {
-						x_positive_speed=90-orientation.pitch;
-						x_negative_speed=90;
-					} else {
-						x_positive_speed=90;
-						x_negative_speed=90+orientation.pitch;
-					}
-					if (orientation.roll>=0) {
-						y_positive_speed=90-orientation.roll;
-						y_negative_speed=90;
-					} else {
-						y_positive_speed=90;
-						y_negative_speed=90+orientation.roll;
-					}
-					GPIO_Write(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-				} else {
-					tim3_interrupt_count++;
-				}
-			}
-			if (exti_interrupt!=0) {																								//
-				uint8_t data;																													//
-				LIS302DL_Read(&data, 0x3C, 1);																				//
-				exti_interrupt=0;																											//
-				printf("Tap!\t%x\n", data);																						//
-			}
-		} else {
-			if (tim5_interrupt!=0) {
+		if (tim2_interrupt!=0) {
+			GPIO_ToggleBits(GPIOD, GPIO_Pin_0);
+			tim2_interrupt = 0;
+			display_orientation(&orientation);
+		}
+		if (tim5_interrupt!=0) {
+			if (mode) {
 				tim5_interrupt = 0;
-				if (pwm_intensity == max_pwm_intensity) {
-					pwm_direction = 1;
-				} else if (pwm_intensity == 0) {
-					pwm_direction = 0;
-				}
-				if (pwm_direction) {
-					pwm_intensity--;
-				} else {
-					pwm_intensity++;
-				}
-				real_pwm_intensity = max_pwm_intensity * pow(0.5f*(-cos(2*PI*(float)pwm_intensity / max_pwm_intensity)+1), 2);
-				TIM_SetCompare1(TIM4, real_pwm_intensity);
-				TIM_SetCompare2(TIM4, real_pwm_intensity);
-				TIM_SetCompare3(TIM4, real_pwm_intensity);
-				TIM_SetCompare4(TIM4, real_pwm_intensity);
+				update_led_pwm_intensities_pulse(&led_pwm_1);
+				update_led_pwm_intensities_pulse(&led_pwm_2);
+				update_led_pwm_intensities_pulse(&led_pwm_3);
+				update_led_pwm_intensities_pulse(&led_pwm_4);
 			}
 		}			
+	}
+}
+
+void change_mode() {
+	if (mode) {
+		mode = 0;
+	} else {
+		mode = 1;
+	}
+}
+
+void display_orientation(struct Orientation *orientation) {
+	update_orientation(orientation);
+	printf("%f\t%f\n", orientation->moving_average_pitch.average, orientation->moving_average_roll.average);
+	if (!mode) {
+		uint32_t new_led_intensities[4];
+		if (orientation->moving_average_roll.average >= 0) {
+			new_led_intensities[2] = orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;
+			new_led_intensities[0] = 0;
+		} else {
+			new_led_intensities[2] = 0;
+			new_led_intensities[0] = -orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;
+		}
+		if (orientation->moving_average_pitch.average >= 0) {
+			new_led_intensities[3] = orientation->moving_average_pitch.average * MAX_PWM_INTENSITY / 90;
+			new_led_intensities[1] = 0;
+		} else {
+			new_led_intensities[3] = 0;
+			new_led_intensities[1] = -orientation->moving_average_pitch.average * MAX_PWM_INTENSITY / 90;
+		}
+		update_led_intensities(new_led_intensities, sizeof(new_led_intensities)/sizeof(new_led_intensities[0]));
 	}
 }
 
@@ -157,15 +96,6 @@ void TIM2_IRQHandler(void)																									//
   {
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);															//
 		tim2_interrupt++;																												//
-  }
-}
-
-void TIM3_IRQHandler(void)																									//
-{
-	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)												//
-  {
-    TIM_ClearITPendingBit(TIM3, TIM_IT_Update);															//
-		tim3_interrupt++;																												//
   }
 }
 
@@ -186,4 +116,3 @@ void EXTI1_IRQHandler(void)																									//
 		tap_interrupt++;
   }
 }
-

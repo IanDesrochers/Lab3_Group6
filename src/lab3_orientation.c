@@ -1,27 +1,45 @@
-#include <stdio.h>
 #include <math.h>
 #include "stm32f4xx.h"
-#include "stm32f4xx_conf.h"
-
 #include "stm32f4_discovery_lis302dl.h"
-#include "lab3_accelerometer.h"
 
-#define PI 3.14159
+#include "lab3_orientation.h"
 
-void getOrientation(struct Orientation *orientation) {
+void read_accelerometer(struct Orientation *orientation);
+
+void update_orientation(struct Orientation *orientation) {
+	read_accelerometer(orientation);
+	
+	insert_value(&orientation->moving_average_pitch, orientation->pitch);
+	insert_value(&orientation->moving_average_roll, orientation->roll);
+
+	calculate_average(&orientation->moving_average_pitch);
+	calculate_average(&orientation->moving_average_roll);
+}
+
+void read_accelerometer(struct Orientation *orientation) {
 	int32_t reading[3];
+	
 	LIS302DL_ReadACC(reading);
-	orientation->pitch = 180*atan(reading[0]/sqrt(pow(reading[1],2)+pow(reading[2],2)))/PI;						//do math, get angle for pitch
-	orientation->roll = 180*atan(reading[1]/sqrt(pow(reading[0],2)+pow(reading[2],2)))/PI;						//do more math, get angle for roll
+	
+	orientation->rawx = reading[0];
+	orientation->rawy = reading[1];
+	orientation->rawz = reading[2];
+	
+	orientation->x = (orientation->rawx*ACC11 + orientation->rawy*ACC21 + orientation->rawz*ACC31) + ACC10;
+	orientation->y = (orientation->rawx*ACC12 + orientation->rawy*ACC22 + orientation->rawz*ACC32) + ACC20;
+	orientation->z = (orientation->rawx*ACC13 + orientation->rawy*ACC23 + orientation->rawz*ACC33) + ACC30;
+	
+	orientation->pitch = 180*atan(orientation->x/sqrt(pow(orientation->y,2)+pow(orientation->z,2)))/PI;						//do math, get angle for pitch
+	orientation->roll = 180*atan(orientation->y/sqrt(pow(orientation->x,2)+pow(orientation->z,2)))/PI;						//do more math, get angle for roll
 	orientation->yaw = 0;																																							//
 }
 
-void init_accel() {
+void init_accelerometer() {
 	LIS302DL_InitTypeDef LIS302DL_InitStruct; 											//Struct for initialization
-	LIS302DL_InterruptConfigTypeDef LIS302DL_InterruptStruct; 			//struct for interrupt configuration
+	//LIS302DL_InterruptConfigTypeDef LIS302DL_InterruptStruct; 			//struct for interrupt configuration
 	
 	uint8_t int_ctrl_reg_value = 0x38;															//(00111000) active high, push-pull, click interrupt, data ready
-	uint8_t click_cfg_reg_value = 0x30;															//latch interrupt request to CLICK_SRC reg, and reset CLICK_SRC to 0 when read
+	uint8_t click_cfg_reg_value = 0x10;															//latch interrupt request to CLICK_SRC reg, and reset CLICK_SRC to 0 when read
 	//uint8_t click_thsz_reg_value = 0x02;													//
 	
 	uint8_t click_window_reg_value = 0x7F;													//max time interval after end of latency interval where click detection can start again if device configured for double click detect
@@ -39,10 +57,10 @@ void init_accel() {
 	LIS302DL_Init(&LIS302DL_InitStruct);
 	
 	//Accel Interrupt Config
-	LIS302DL_InterruptStruct.Latch_Request = LIS302DL_INTERRUPTREQUEST_NOTLATCHED; //wrong? and overwritten
-  LIS302DL_InterruptStruct.SingleClick_Axes = LIS302DL_CLICKINTERRUPT_XYZ_ENABLE; //overwritten
-	LIS302DL_InterruptStruct.DoubleClick_Axes = LIS302DL_DOUBLECLICKINTERRUPT_XYZ_ENABLE;//overwritten
-  LIS302DL_InterruptConfig(&LIS302DL_InterruptStruct);
+	/*LIS302DL_InterruptStruct.Latch_Request = LIS302DL_INTERRUPTREQUEST_NOTLATCHED; //wrong? and overwritten
+  LIS302DL_InterruptStruct.SingleClick_Axes = LIS302DL_CLICKINTERRUPT_Z_ENABLE; //overwritten
+	LIS302DL_InterruptStruct.DoubleClick_Axes = LIS302DL_DOUBLECLICKINTERRUPT_XYZ_DISABLE;//overwritten
+  LIS302DL_InterruptConfig(&LIS302DL_InterruptStruct);*/
 	
 	//Specifiy value to write, register to write it too, and the number of bytes to be written
 	LIS302DL_Write(&int_ctrl_reg_value, LIS302DL_CTRL_REG3_ADDR, sizeof(int_ctrl_reg_value));					//Enable click interrupt on INT0
@@ -52,5 +70,13 @@ void init_accel() {
   LIS302DL_Write(&click_time_limit_reg_value, LIS302DL_CLICK_TIMELIMIT_REG_ADDR, 1);								//Configure Time Limit
   LIS302DL_Write(&click_latency_reg_value, LIS302DL_CLICK_LATENCY_REG_ADDR, 1);											//Configure Latency
   LIS302DL_Write(&click_window_reg_value, LIS302DL_CLICK_WINDOW_REG_ADDR, 1);    										//Configure Click Window
+}
 
+void init_orientation(struct Orientation *orientation) {
+	orientation->pitch = 0;
+	orientation->roll = 0;
+	orientation->yaw = 0;
+	init_moving_average(&orientation->moving_average_pitch);
+	init_moving_average(&orientation->moving_average_roll);
+	init_moving_average(&orientation->moving_average_yaw);
 }

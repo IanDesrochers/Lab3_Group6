@@ -1,28 +1,6 @@
-#include <stdio.h>
 #include "stm32f4xx.h"
-#include "stm32f4xx_conf.h"
-#include "stm32f4_discovery_lis302dl.h"
 
 #include "lab3_init.h"
-
-void init_leds() {
-	GPIO_InitTypeDef gpio_init_s;
-	
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE); 															//Enable clock to LEDs
-	
-	GPIO_StructInit(&gpio_init_s);
-	gpio_init_s.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15; 			//Initialize 4 LEDs for use, attached to these pins
-	gpio_init_s.GPIO_Mode = GPIO_Mode_OUT;																							//we want these pins to be outputs
-	gpio_init_s.GPIO_Speed = GPIO_Speed_50MHz;																					//clock freq to pin
-	gpio_init_s.GPIO_OType = GPIO_OType_PP;																							//push-pull, instead of open drain
-	gpio_init_s.GPIO_PuPd = GPIO_PuPd_NOPULL;																						//sets pulldown resistors to be inactive
-	GPIO_Init(GPIOD, &gpio_init_s);																											//Initializes the peripherals with the specified params
-	
-	/*GPIO_PinAFConfig(GPIOD, GPIO_PinSource12, GPIO_AF_TIM4);													//GPIO_AF_TIM4: Connect TIM4 pins to AF2
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource13, GPIO_AF_TIM4); 
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource14, GPIO_AF_TIM4);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource15, GPIO_AF_TIM4);*/
-}
 
 void init_TIM2() {
   NVIC_InitTypeDef NVIC_InitStructure;																								//
@@ -45,29 +23,6 @@ void init_TIM2() {
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01; 															//subpriority value 0-15, lower # =higher prriority
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 																		//enable interrupt request channel specified earlier
   NVIC_Init(&NVIC_InitStructure);																											//initialize struct parameters into tim2 nvic
-}
-
-void init_TIM3() {
-  NVIC_InitTypeDef NVIC_InitStructure;																								//
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;																			//
-	
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); 																//Enable clock to TIM3
-	
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;																											//no clock division
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Down;																				//counts down
-	TIM_TimeBaseStructure.TIM_Period = 0x00FF;																													//max period available (2^16-1)
-	TIM_TimeBaseStructure.TIM_Prescaler = (SystemCoreClock/(2*900*TIM_TimeBaseStructure.TIM_Period))-1;		//set prescaler
-	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0x0;																									//restart RCR count after counting down to this value
-	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);				//****************************************		//initialize struct parameters to TIM3
-	
-	TIM_Cmd(TIM3, ENABLE);																																							//enable specified peripheral
-	TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);																													//enable new interrupt state
-	
-	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;																			//specify interrupt request channel to be used
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02; 												//indicates pre-emption priority, 0-15, lower # =higher prriority
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01; 															//subpriority value 0-15, lower # =higher prriority
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 																		//enable interrupt request channel specified earlier
-  NVIC_Init(&NVIC_InitStructure);																											//initialize NVIC for TIM3 with struct params
 }
 
 void init_EXTI() {
@@ -108,77 +63,16 @@ void init_EXTI() {
   NVIC_Init(&NVIC_InitStructure);																											//
 }
 
-void init_LED_PWM() {
-	GPIO_InitTypeDef GPIO_InitStructure;
-
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-  
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
- 
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource12, GPIO_AF_TIM4);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource13, GPIO_AF_TIM4); 
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource14, GPIO_AF_TIM4);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource15, GPIO_AF_TIM4); 
-}
-
-void init_TIM4_PWM() {
+void init_sample_rate_test() {
+	GPIO_InitTypeDef gpio_init_s;
 	
-	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE); 															//Enable clock to LEDs
 	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
-	
-	TIM_TimeBaseStructure.TIM_Period = MAX_PWM_INTENSITY;
-	TIM_TimeBaseStructure.TIM_Prescaler = 0x00FF * 100 / TIM_TimeBaseStructure.TIM_Period;
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-
-	TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
-
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_Pulse = 0;
-	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-
-	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
-
-	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
-	TIM_OC2Init(TIM4, &TIM_OCInitStructure);
-	TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);
-	TIM_OC3Init(TIM4, &TIM_OCInitStructure);
-	TIM_OC3PreloadConfig(TIM4, TIM_OCPreload_Enable);
-	TIM_OC4Init(TIM4, &TIM_OCInitStructure);
-	TIM_OC4PreloadConfig(TIM4, TIM_OCPreload_Enable);
-	
-  TIM_ARRPreloadConfig(TIM4, ENABLE);
-
-  TIM_Cmd(TIM4, ENABLE);
-}
-
-void init_TIM5() {
-  NVIC_InitTypeDef NVIC_InitStructure;																								//
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;																			//
-	
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE); 																//Enable clock to TIM3
-	
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;																											//no clock division
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Down;																				//counts down
-	TIM_TimeBaseStructure.TIM_Period = 0x0FFF;																													//max period available (2^16-1)
-	TIM_TimeBaseStructure.TIM_Prescaler = (SystemCoreClock/(2*50*TIM_TimeBaseStructure.TIM_Period*MAX_PWM_INTENSITY/100))-1;		//set prescaler
-	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0x0;																									//restart RCR count after counting down to this value
-	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);				//****************************************		//initialize struct parameters to TIM3
-	
-	TIM_Cmd(TIM5, ENABLE);																																							//enable specified peripheral
-	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);																													//enable new interrupt state
-	
-	NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;																			//specify interrupt request channel to be used
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02; 												//indicates pre-emption priority, 0-15, lower # =higher prriority
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01; 															//subpriority value 0-15, lower # =higher prriority
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 																		//enable interrupt request channel specified earlier
-  NVIC_Init(&NVIC_InitStructure);																											//initialize NVIC for TIM3 with struct params
+	GPIO_StructInit(&gpio_init_s);
+	gpio_init_s.GPIO_Pin = GPIO_Pin_0; 			//Initialize 4 LEDs for use, attached to these pins
+	gpio_init_s.GPIO_Mode = GPIO_Mode_OUT;																							//we want these pins to be outputs
+	gpio_init_s.GPIO_Speed = GPIO_Speed_50MHz;																					//clock freq to pin
+	gpio_init_s.GPIO_OType = GPIO_OType_PP;																							//push-pull, instead of open drain
+	gpio_init_s.GPIO_PuPd = GPIO_PuPd_NOPULL;																						//sets pulldown resistors to be inactive
+	GPIO_Init(GPIOD, &gpio_init_s);
 }
