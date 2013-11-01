@@ -6,28 +6,28 @@
 
 void read_accelerometer(struct Orientation *orientation);
 
-void update_orientation(struct Orientation *orientation) {
-	read_accelerometer(orientation);
+void update_orientation(struct Orientation *orientation) {																											//
+	read_accelerometer(orientation);																																							//read data into orientation struct
 	
-	insert_value(&orientation->moving_average_pitch, orientation->pitch);
-	insert_value(&orientation->moving_average_roll, orientation->roll);
+	insert_value(&orientation->moving_average_pitch, orientation->pitch);																					//move data into moving average filter
+	insert_value(&orientation->moving_average_roll, orientation->roll);																						//move data in moving average filter
 
-	calculate_average(&orientation->moving_average_pitch);
-	calculate_average(&orientation->moving_average_roll);
+	calculate_average(&orientation->moving_average_pitch);																												//calc pitch average
+	calculate_average(&orientation->moving_average_roll);																													//calc roll average
 }
 
 void read_accelerometer(struct Orientation *orientation) {
 	int32_t reading[3];
 	
-	LIS302DL_ReadACC(reading);
+	LIS302DL_ReadACC(reading);																																										//Read LIS302DL output register, and calculate the acceleration (mg)
 	
 	orientation->rawx = reading[0];
 	orientation->rawy = reading[1];
 	orientation->rawz = reading[2];
 	
-	orientation->x = (orientation->rawx*ACC11 + orientation->rawy*ACC21 + orientation->rawz*ACC31) + ACC10;
-	orientation->y = (orientation->rawx*ACC12 + orientation->rawy*ACC22 + orientation->rawz*ACC32) + ACC20;
-	orientation->z = (orientation->rawx*ACC13 + orientation->rawy*ACC23 + orientation->rawz*ACC33) + ACC30;
+	orientation->x = (orientation->rawx*ACC11 + orientation->rawy*ACC21 + orientation->rawz*ACC31) + ACC10;				//calibrate X
+	orientation->y = (orientation->rawx*ACC12 + orientation->rawy*ACC22 + orientation->rawz*ACC32) + ACC20;				//calibrate Y
+	orientation->z = (orientation->rawx*ACC13 + orientation->rawy*ACC23 + orientation->rawz*ACC33) + ACC30;				//calibrate Z
 	
 	orientation->pitch = 180*atan(orientation->x/sqrt(pow(orientation->y,2)+pow(orientation->z,2)))/PI;						//do math, get angle for pitch
 	orientation->roll = 180*atan(orientation->y/sqrt(pow(orientation->x,2)+pow(orientation->z,2)))/PI;						//do more math, get angle for roll
@@ -72,11 +72,11 @@ void init_accelerometer() {
   LIS302DL_Write(&click_window_reg_value, LIS302DL_CLICK_WINDOW_REG_ADDR, 1);    										//Configure Click Window
 }
 
-void init_orientation(struct Orientation *orientation) {
-	orientation->pitch = 0;
-	orientation->roll = 0;
-	orientation->yaw = 0;
-	init_moving_average(&orientation->moving_average_pitch);
-	init_moving_average(&orientation->moving_average_roll);
-	init_moving_average(&orientation->moving_average_yaw);
+void init_orientation(struct Orientation *orientation) {																						//initialize orientation struct
+	orientation->pitch = 0;																																						//X
+	orientation->roll = 0;																																						//Y
+	orientation->yaw = 0;																																							//Z
+	init_moving_average(&orientation->moving_average_pitch);																					//moving average value of x
+	init_moving_average(&orientation->moving_average_roll);																						//moving average value of y
+	init_moving_average(&orientation->moving_average_yaw);																						//moving average value of z
 }

@@ -6,6 +6,8 @@
 #define PI 3.14159
 #endif
 
+
+//Calibration Matrix
 #define ACC11 1.0177
 #define ACC12 0.0202
 #define ACC13 0.0003
@@ -18,6 +20,8 @@
 #define ACC32 -0.0120
 #define ACC33 0.9686
 
+
+//Calibration Offsets
 #define ACC10 18.5581
 #define ACC20 21.9931
 #define ACC30 86.8937

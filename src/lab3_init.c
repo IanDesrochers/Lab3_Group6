@@ -3,8 +3,8 @@
 #include "lab3_init.h"
 
 void init_TIM2() {
-  NVIC_InitTypeDef NVIC_InitStructure;																								//
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;																			//
+  NVIC_InitTypeDef NVIC_InitStructure;																								//create NVIC struct for holding parameters
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;																			//create TIM struct for holding timer parameters
 	
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE); 																							//Enable clock to TIM2
 	
@@ -56,11 +56,15 @@ void init_EXTI() {
 	-Serves a complete set of 255 (240 external) interrupts.
 	*/
 	
+	// Preemption Priority = used to determine if an interrupt that occurs after can overtake
+	// previous interrupt that is currently being serviced
+	// SubPriority = used to determine priority if two interrupts occur at the same time
+	
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI1_IRQn;																		//enable interrupt request channel
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x01;												//set priority of pre-emption interrupt
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;																//set sub priority
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;																			//enable the IRQ channel specified by nvic
-  NVIC_Init(&NVIC_InitStructure);																											//
+  NVIC_Init(&NVIC_InitStructure);																											//pass struct to NVIC, initialize
 }
 
 void init_sample_rate_test() {
@@ -69,7 +73,7 @@ void init_sample_rate_test() {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE); 															//Enable clock to LEDs
 	
 	GPIO_StructInit(&gpio_init_s);
-	gpio_init_s.GPIO_Pin = GPIO_Pin_0; 			//Initialize 4 LEDs for use, attached to these pins
+	gpio_init_s.GPIO_Pin = GPIO_Pin_0; 																									//Initialize 4 LEDs for use, attached to these pins
 	gpio_init_s.GPIO_Mode = GPIO_Mode_OUT;																							//we want these pins to be outputs
 	gpio_init_s.GPIO_Speed = GPIO_Speed_50MHz;																					//clock freq to pin
 	gpio_init_s.GPIO_OType = GPIO_OType_PP;																							//push-pull, instead of open drain

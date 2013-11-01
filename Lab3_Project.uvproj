@@ -442,6 +442,26 @@
               <FileType>1</FileType>
               <FilePath>.\src\lab3_orientation.c</FilePath>
             </File>
+            <File>
+              <FileName>lab3_filter.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\lab3_filter.h</FilePath>
+            </File>
+            <File>
+              <FileName>lab3_init.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\lab3_init.h</FilePath>
+            </File>
+            <File>
+              <FileName>lab3_orientation.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\lab3_orientation.h</FilePath>
+            </File>
+            <File>
+              <FileName>lab3_pwm.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\lab3_pwm.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
