@@ -17,6 +17,7 @@ static uint32_t mode = 0;
 
 void change_mode(void);
 void display_orientation(struct Orientation *orientation);
+void display_led_pulse(struct LED_PWM *led_pwm);
 
 int main()
 {
@@ -25,17 +26,18 @@ int main()
 	struct LED_PWM led_pwm_1, led_pwm_2, led_pwm_3, led_pwm_4;
 	
 	//Calls to initialize used peripherals
-	init_PWM();
 	init_accelerometer();
-	init_EXTI();
 	init_TIM2();
+	init_EXTI();
+	init_PWM();
+	init_sample_rate_test();
 	
 	//Struct Initialization
 	init_orientation(&orientation);
-	init_LED_PWM(&led_pwm_1, MAX_PWM_INTENSITY);
-	init_LED_PWM(&led_pwm_2, MAX_PWM_INTENSITY);
-	init_LED_PWM(&led_pwm_3, MAX_PWM_INTENSITY);
-	init_LED_PWM(&led_pwm_4, MAX_PWM_INTENSITY);
+	init_LED_PWM(&led_pwm_1, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 0, 1);
+	init_LED_PWM(&led_pwm_2, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 125, 2);
+	init_LED_PWM(&led_pwm_3, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 250, 3);
+	init_LED_PWM(&led_pwm_4, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 375, 4);
 	
 	while(1) {
 		if (tap_interrupt!=0) {
@@ -50,10 +52,10 @@ int main()
 		if (tim5_interrupt!=0) {
 			if (mode) {
 				tim5_interrupt = 0;
-				update_led_pwm_intensities_pulse(&led_pwm_1);
-				update_led_pwm_intensities_pulse(&led_pwm_2);
-				update_led_pwm_intensities_pulse(&led_pwm_3);
-				update_led_pwm_intensities_pulse(&led_pwm_4);
+				display_led_pulse(&led_pwm_1);
+				display_led_pulse(&led_pwm_2);
+				display_led_pulse(&led_pwm_3);
+				display_led_pulse(&led_pwm_4);
 			}
 		}			
 	}
@@ -88,6 +90,14 @@ void display_orientation(struct Orientation *orientation) {
 		}
 		update_led_intensities(new_led_intensities, sizeof(new_led_intensities)/sizeof(new_led_intensities[0]));
 	}
+}
+
+void display_led_pulse(struct LED_PWM *led_pwm) {
+	if (led_pwm->led_pwm_update_pulse_count >= PWM_UPDATE_INTENSITY_FREQUENCY*led_pwm->pwm_pulse_speed/led_pwm->max_pwm_intensity/1000) {
+		update_led_pwm_intensity_pulse(led_pwm);
+		led_pwm->led_pwm_update_pulse_count = 0;
+	}
+	led_pwm->led_pwm_update_pulse_count++;
 }
 
 void TIM2_IRQHandler(void)																									//

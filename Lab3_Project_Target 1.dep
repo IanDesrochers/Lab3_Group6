@@ -37,7 +37,7 @@ I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\s
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
-F (.\src\main.c)(0x5272C9EB)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\main.o --omf_browse .\obj\main.crf --depend .\obj\main.d)
+F (.\src\main.c)(0x5272CECD)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\main.o --omf_browse .\obj\main.crf --depend .\obj\main.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86004)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C86004)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\stm32f4xx.h)(0x5266A891)
@@ -75,10 +75,10 @@ I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\s
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\LIS302DL\inc\stm32f4_discovery_lis302dl.h)(0x5266A891)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_init.h)(0x5272C5EC)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_accelerometer.h)(0x5272CA46)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_filter.h)(0x5272C98A)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_init.h)(0x5272D023)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_filter.h)(0x5272D666)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_pwm.h)(0x5272C407)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_orientation.h)(0x5272D625)
 F (.\src\stm32f4xx.h)(0x5266A891)()
 F (.\src\stm32f4xx_conf.h)(0x5266A891)()
 F (.\src\system_stm32f4xx.c)(0x5266A891)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\system_stm32f4xx.o --omf_browse .\obj\system_stm32f4xx.crf --depend .\obj\system_stm32f4xx.d)
@@ -116,8 +116,7 @@ I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\s
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
-F (.\src\lab3_init.c)(0x5272CA1B)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_init.o --omf_browse .\obj\lab3_init.crf --depend .\obj\lab3_init.d)
-I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86004)
+F (.\src\lab3_init.c)(0x5272CB71)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_init.o --omf_browse .\obj\lab3_init.crf --depend .\obj\lab3_init.d)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\stm32f4xx.h)(0x5266A891)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C85E0A)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C86004)
@@ -152,8 +151,7 @@ I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\s
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\LIS302DL\inc\stm32f4_discovery_lis302dl.h)(0x5266A891)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_init.h)(0x5272C5EC)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_init.h)(0x5272D023)
 F (.\src\lab3_filter.c)(0x52725FE1)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_filter.o --omf_browse .\obj\lab3_filter.crf --depend .\obj\lab3_filter.d)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\stm32f4xx.h)(0x5266A891)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C85E0A)
@@ -189,10 +187,9 @@ I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\s
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_filter.h)(0x5272C98A)
-F (.\src\lab3_pwm.c)(0x5272C407)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_pwm.o --omf_browse .\obj\lab3_pwm.crf --depend .\obj\lab3_pwm.d)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_filter.h)(0x5272D666)
+F (.\src\lab3_pwm.c)(0x5272D023)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_pwm.o --omf_browse .\obj\lab3_pwm.crf --depend .\obj\lab3_pwm.d)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C86004)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_pwm.h)(0x5272C407)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\stm32f4xx.h)(0x5266A891)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C85E0A)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C86004)
@@ -227,8 +224,8 @@ I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\s
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
-F (.\src\lab3_orientation.c)(0x5272CA46)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_orientation.o --omf_browse .\obj\lab3_orientation.crf --depend .\obj\lab3_orientation.d)
-I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86004)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_pwm.h)(0x5272C407)
+F (.\src\lab3_orientation.c)(0x5272D6AF)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_orientation.o --omf_browse .\obj\lab3_orientation.crf --depend .\obj\lab3_orientation.d)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C86004)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\stm32f4xx.h)(0x5266A891)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C85E0A)
@@ -265,8 +262,8 @@ I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\s
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\LIS302DL\inc\stm32f4_discovery_lis302dl.h)(0x5266A891)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_orientation.h)(0x5272CA46)
-I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_filter.h)(0x5272C98A)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_orientation.h)(0x5272D625)
+I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\lab3_filter.h)(0x5272D666)
 F (.\STM32F4xx_StdPeriph_Driver\src\misc.c)(0x5266A891)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\misc.o --omf_browse .\obj\misc.crf --depend .\obj\misc.d)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x5266A891)
 I (C:\Users\Joshua\Documents\GitHub\Lab3_Group6\src\stm32f4xx.h)(0x5266A891)

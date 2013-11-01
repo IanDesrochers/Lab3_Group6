@@ -17,13 +17,16 @@ void init_PWM() {
 	init_TIM5();
 }
 
-void init_LED_PWM(struct LED_PWM *led_pwm, uint32_t max_pwm_intensity) {
-	led_pwm->pwm_intensity = 0;
+void init_LED_PWM(struct LED_PWM *led_pwm, uint32_t max_pwm_intensity, uint32_t pwm_pulse_speed, uint32_t phase, uint32_t CCR) {
+	led_pwm->pwm_pulse_speed = pwm_pulse_speed;
+	led_pwm->pwm_intensity = phase;
 	led_pwm->max_pwm_intensity = max_pwm_intensity;
 	led_pwm->pwm_direction = 0;
+	led_pwm->CCR = CCR;
+	led_pwm->led_pwm_update_pulse_count = 0;
 }
 
-void update_led_pwm_intensities_pulse(struct LED_PWM *led_pwm) {
+void update_led_pwm_intensity_pulse(struct LED_PWM *led_pwm) {
 	if (led_pwm->pwm_intensity == led_pwm->max_pwm_intensity) {
 		led_pwm->pwm_direction = 1;
 	} else if (led_pwm->pwm_intensity == 0) {
@@ -35,8 +38,24 @@ void update_led_pwm_intensities_pulse(struct LED_PWM *led_pwm) {
 		led_pwm->pwm_intensity++;
 	}
 	uint32_t real_pwm_intensity = led_pwm->max_pwm_intensity * pow(0.5f*(-cos(2*PI*(float)led_pwm->pwm_intensity / led_pwm->max_pwm_intensity)+1), 2);
-	uint32_t led_intensities[] = {real_pwm_intensity, real_pwm_intensity, real_pwm_intensity, real_pwm_intensity};
-	update_led_intensities(led_intensities, sizeof(led_intensities)/sizeof(led_intensities[0]));
+	switch (led_pwm->CCR) {
+		case 1:
+			TIM_SetCompare1(TIM4, real_pwm_intensity);
+			break;
+		case 2:
+			TIM_SetCompare2(TIM4, real_pwm_intensity);
+			break;
+		case 3:
+			TIM_SetCompare3(TIM4, real_pwm_intensity);
+			break;
+		case 4:
+			TIM_SetCompare4(TIM4, real_pwm_intensity);
+			break;
+		default:
+			break;
+	}
+	//uint32_t led_intensities[] = {real_pwm_intensity, real_pwm_intensity, real_pwm_intensity, real_pwm_intensity};
+	//update_led_intensities(led_intensities, sizeof(led_intensities)/sizeof(led_intensities[0]));
 }
 
 void update_led_intensities(uint32_t led_intensities[], uint32_t length) {
@@ -109,8 +128,8 @@ void init_TIM5() {
 	
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;																											//no clock division
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Down;																				//counts down
-	TIM_TimeBaseStructure.TIM_Period = 0x0FFF;																													//max period available (2^16-1)
-	TIM_TimeBaseStructure.TIM_Prescaler = (SystemCoreClock/(2*50*TIM_TimeBaseStructure.TIM_Period*MAX_PWM_INTENSITY/100))-1;		//set prescaler
+	TIM_TimeBaseStructure.TIM_Period = 0x007F;																													//max period available (2^16-1)
+	TIM_TimeBaseStructure.TIM_Prescaler = SystemCoreClock / (2 * PWM_UPDATE_INTENSITY_FREQUENCY * TIM_TimeBaseStructure.TIM_Period);		//set prescaler
 	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0x0;																									//restart RCR count after counting down to this value
 	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);				//****************************************		//initialize struct parameters to TIM3
 	
