@@ -50,7 +50,7 @@ int main()
 			tim2_interrupt = 0;
 			display_orientation(&orientation);
 		}
-		if (tim5_interrupt!=0) {																									//Interrupt flag for led pulse
+		if (tim5_interrupt!=0) {																									//Interrupt flag for led intensity change
 			if (mode) {																															//PWM mode
 				tim5_interrupt = 0;																										//reset flag
 				display_led_pulse(&led_pwm_1);																				//flash LEDs
@@ -76,25 +76,25 @@ void display_orientation(struct Orientation *orientation) {																					
 	if (!mode) {																																															//mode 0, display tilt angle
 		uint32_t new_led_intensities[4];																																				//4 LED intensities in matrix
 		if (orientation->moving_average_roll.average >= 0) {
-			new_led_intensities[2] = orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;						//
-			new_led_intensities[0] = 0;
+			new_led_intensities[2] = orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;						//intensity based off of ratio of angle to 90deg
+			new_led_intensities[0] = 0;																																						//also ensures that opposing LEDs are not on at the same time
 		} else {
 			new_led_intensities[2] = 0;
-			new_led_intensities[0] = -orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;					//
+			new_led_intensities[0] = -orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;					
 		}
 		if (orientation->moving_average_pitch.average >= 0) {
-			new_led_intensities[3] = orientation->moving_average_pitch.average * MAX_PWM_INTENSITY / 90;					//
+			new_led_intensities[3] = orientation->moving_average_pitch.average * MAX_PWM_INTENSITY / 90;					
 			new_led_intensities[1] = 0;
 		} else {
 			new_led_intensities[3] = 0;
-			new_led_intensities[1] = -orientation->moving_average_pitch.average * MAX_PWM_INTENSITY / 90;					//
+			new_led_intensities[1] = -orientation->moving_average_pitch.average * MAX_PWM_INTENSITY / 90;					
 		}
 		update_led_intensities(new_led_intensities, sizeof(new_led_intensities)/sizeof(new_led_intensities[0]));	//update LEDs
 	}
 }
 
-void display_led_pulse(struct LED_PWM *led_pwm) {
-	if (led_pwm->led_pwm_update_pulse_count >= PWM_UPDATE_INTENSITY_FREQUENCY*led_pwm->pwm_pulse_speed/led_pwm->max_pwm_intensity/1000) {
+void display_led_pulse(struct LED_PWM *led_pwm) {																																														//updates intensity at TIM5 interrupt
+	if (led_pwm->led_pwm_update_pulse_count >= PWM_UPDATE_INTENSITY_FREQUENCY*led_pwm->pwm_pulse_speed/led_pwm->max_pwm_intensity/1000) {			//only on desired pulse frequency
 		update_led_pwm_intensity_pulse(led_pwm);
 		led_pwm->led_pwm_update_pulse_count = 0;
 	}
@@ -110,7 +110,7 @@ void TIM2_IRQHandler(void)																									//
   }
 }
 
-void TIM5_IRQHandler(void)																									//
+void TIM5_IRQHandler(void)																									//periodic update of CCR register, updates intensity
 {
 	if (TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET)												//checks whether the specified EXTI line is asserted or not
   {

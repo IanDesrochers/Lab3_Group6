@@ -52,7 +52,7 @@ void init_EXTI() {
 	
 	/*The Nested Vectored Interrupt Controller (NVIC) offers very fast interrupt handling and provides the vector table as a set of real vectors (addresses).
 	-Saves and restores automatically a set of the CPU registers (R0-R3, R12, PC, PSR, and LR).
-	-Does a quick entry to the next pending interrupt without a complete pop/push sequence.
+	-Does a quick entry to the next pending interrupt without a complete pop/push sequence. (Tail-Chaining)
 	-Serves a complete set of 255 (240 external) interrupts.
 	*/
 	

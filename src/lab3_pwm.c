@@ -17,13 +17,13 @@ void init_PWM() {
 	init_TIM5();
 }
 
-void init_LED_PWM(struct LED_PWM *led_pwm, uint32_t max_pwm_intensity, uint32_t pwm_pulse_speed, uint32_t phase, uint32_t CCR) {
-	led_pwm->pwm_pulse_speed = pwm_pulse_speed;
-	led_pwm->pwm_intensity = phase;
-	led_pwm->max_pwm_intensity = max_pwm_intensity;
-	led_pwm->pwm_direction = 0;
-	led_pwm->CCR = CCR;
-	led_pwm->led_pwm_update_pulse_count = 0;
+void init_LED_PWM(struct LED_PWM *led_pwm, uint32_t max_pwm_intensity, uint32_t pwm_pulse_speed, uint32_t phase, uint32_t CCR) {		//initialize LED with parameters
+	led_pwm->pwm_pulse_speed = pwm_pulse_speed;																																												//pulse speed, defined constant
+	led_pwm->pwm_intensity = phase;																																																		//in-sync vs out of sync pwm
+	led_pwm->max_pwm_intensity = max_pwm_intensity;																																										//defined constant
+	led_pwm->pwm_direction = 0;																																																				//initialize to 0
+	led_pwm->CCR = CCR;																																																								//gets specified capture&control register
+	led_pwm->led_pwm_update_pulse_count = 0;																																													//initialize to 0
 }
 
 void update_led_pwm_intensity_pulse(struct LED_PWM *led_pwm) {
@@ -37,10 +37,10 @@ void update_led_pwm_intensity_pulse(struct LED_PWM *led_pwm) {
 	} else {
 		led_pwm->pwm_intensity++;
 	}
-	uint32_t real_pwm_intensity = led_pwm->max_pwm_intensity * pow(0.5f*(-cos(2*PI*(float)led_pwm->pwm_intensity / led_pwm->max_pwm_intensity)+1), 2);
+	uint32_t real_pwm_intensity = led_pwm->max_pwm_intensity * pow(0.5f*(-cos(2*PI*(float)led_pwm->pwm_intensity / led_pwm->max_pwm_intensity)+1), 2); //Smooth PWM intensity function
 	switch (led_pwm->CCR) {
 		case 1:
-			TIM_SetCompare1(TIM4, real_pwm_intensity);
+			TIM_SetCompare1(TIM4, real_pwm_intensity);			//update correct LED based off of CCR register
 			break;
 		case 2:
 			TIM_SetCompare2(TIM4, real_pwm_intensity);
@@ -86,7 +86,7 @@ void init_LEDS() {																							//initialize LEDs
   GPIO_PinAFConfig(GPIOD, GPIO_PinSource15, GPIO_AF_TIM4); 
 }
 
-void init_TIM4() {																															//Timer for PWM
+void init_TIM4() {																															//Timer for PWM, constantly running in background.  TIM5 changes CCR for intensity
 	
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;																//timer struct
 	TIM_OCInitTypeDef  TIM_OCInitStructure;																				//output compare struct
@@ -94,7 +94,7 @@ void init_TIM4() {																															//Timer for PWM
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);													//clock enable to Tim4
 	
 	TIM_TimeBaseStructure.TIM_Period = MAX_PWM_INTENSITY;													//period=max intensity for pwm
-	TIM_TimeBaseStructure.TIM_Prescaler = SystemCoreClock / (2 * PWM_FREQUENCY * TIM_TimeBaseStructure.TIM_Period);		//
+	TIM_TimeBaseStructure.TIM_Prescaler = SystemCoreClock / (2 * PWM_FREQUENCY * TIM_TimeBaseStructure.TIM_Period);		//set prescaler for LED function
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;																	//no divisons
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;										//count up to max intensity
 
@@ -109,18 +109,18 @@ void init_TIM4() {																															//Timer for PWM
 
 	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);														//Enables TIM4 peripheral Preload register on CCR1
 	TIM_OC2Init(TIM4, &TIM_OCInitStructure);
-	TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);
+	TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);														//Enables TIM4 peripheral Preload register on CCR2
 	TIM_OC3Init(TIM4, &TIM_OCInitStructure);
-	TIM_OC3PreloadConfig(TIM4, TIM_OCPreload_Enable);
+	TIM_OC3PreloadConfig(TIM4, TIM_OCPreload_Enable);														//Enables TIM4 peripheral Preload register on CCR3
 	TIM_OC4Init(TIM4, &TIM_OCInitStructure);
-	TIM_OC4PreloadConfig(TIM4, TIM_OCPreload_Enable);
+	TIM_OC4PreloadConfig(TIM4, TIM_OCPreload_Enable);														//Enables TIM4 peripheral Preload register on CCR4
 	
   TIM_ARRPreloadConfig(TIM4, ENABLE);
 
   TIM_Cmd(TIM4, ENABLE);
 }
 
-void init_TIM5() {																																		//Timer for scaling down clock for TIM4
+void init_TIM5() {																																		//
   NVIC_InitTypeDef NVIC_InitStructure;																								//nvic struct
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;																			//timer struct
 	

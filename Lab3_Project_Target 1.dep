@@ -37,7 +37,7 @@ I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAACACA)
-F (.\src\main.c)(0x52732996)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\main.o --omf_browse .\obj\main.crf --depend .\obj\main.d)
+F (.\src\main.c)(0x5273CA31)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\main.o --omf_browse .\obj\main.crf --depend .\obj\main.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86004)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C86004)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\stm32f4xx.h)(0x51104FF5)
@@ -78,7 +78,7 @@ I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_init.h)(0x52732996)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_filter.h)(0x52732996)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_pwm.h)(0x52732996)
-I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_orientation.h)(0x52732996)
+I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_orientation.h)(0x5273C849)
 F (.\src\stm32f4xx.h)(0x51104FF5)()
 F (.\src\stm32f4xx_conf.h)(0x51134E3B)()
 F (.\src\system_stm32f4xx.c)(0x5075CD32)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\system_stm32f4xx.o --omf_browse .\obj\system_stm32f4xx.crf --depend .\obj\system_stm32f4xx.d)
@@ -116,7 +116,7 @@ I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAACACA)
-F (.\src\lab3_init.c)(0x52732996)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_init.o --omf_browse .\obj\lab3_init.crf --depend .\obj\lab3_init.d)
+F (.\src\lab3_init.c)(0x5273C01C)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_init.o --omf_browse .\obj\lab3_init.crf --depend .\obj\lab3_init.d)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\stm32f4xx.h)(0x51104FF5)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C85E0A)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C86004)
@@ -188,7 +188,7 @@ I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_filter.h)(0x52732996)
-F (.\src\lab3_pwm.c)(0x52732996)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_pwm.o --omf_browse .\obj\lab3_pwm.crf --depend .\obj\lab3_pwm.d)
+F (.\src\lab3_pwm.c)(0x5273C7B4)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_pwm.o --omf_browse .\obj\lab3_pwm.crf --depend .\obj\lab3_pwm.d)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C86004)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\stm32f4xx.h)(0x51104FF5)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C85E0A)
@@ -225,7 +225,7 @@ I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_pwm.h)(0x52732996)
-F (.\src\lab3_orientation.c)(0x52732996)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_orientation.o --omf_browse .\obj\lab3_orientation.crf --depend .\obj\lab3_orientation.d)
+F (.\src\lab3_orientation.c)(0x5273C81B)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\lab3_orientation.o --omf_browse .\obj\lab3_orientation.crf --depend .\obj\lab3_orientation.d)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C86004)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\stm32f4xx.h)(0x51104FF5)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C85E0A)
@@ -262,11 +262,11 @@ I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAACACA)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\LIS302DL\inc\stm32f4_discovery_lis302dl.h)(0x526AD1C0)
-I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_orientation.h)(0x52732996)
+I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_orientation.h)(0x5273C849)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\src\lab3_filter.h)(0x52732996)
 F (.\src\lab3_filter.h)(0x52732996)()
 F (.\src\lab3_init.h)(0x52732996)()
-F (.\src\lab3_orientation.h)(0x52732996)()
+F (.\src\lab3_orientation.h)(0x5273C849)()
 F (.\src\lab3_pwm.h)(0x52732996)()
 F (.\STM32F4xx_StdPeriph_Driver\src\misc.c)(0x4EAACACA)(-c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork -I.\src -I.\STM32F4xx_StdPeriph_Driver\inc -I.\LIS302DL\inc --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40XX-o .\obj\misc.o --omf_browse .\obj\misc.crf --depend .\obj\misc.d)
 I (C:\Users\Ian\Desktop\Fall 2013\ECSE 426\Lab3\Lab Experiment 3 - Fall 2013\Lab 3 Base Project\Lab3_Group6\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAACACA)
