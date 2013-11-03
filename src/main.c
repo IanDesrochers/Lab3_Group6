@@ -1,3 +1,14 @@
+/**
+  ******************************************************************************
+  * @file    main.c
+  * @author  Group 6
+  * @version V1.0.0
+  * @date    1-November-2013
+  * @brief   Main entry point for Lab3 - Tilt angle accelerometer application
+  */
+
+/* Includes ------------------------------------------------------------------*/
+
 #include <stdio.h>
 #include <math.h>
 #include "stm32f4xx.h"
@@ -9,60 +20,52 @@
 #include "lab3_pwm.h"
 #include "lab3_orientation.h"
 
-//Define required offsets as well, post calibration
+/* Private Variables ------------------------------------------------------------------*/
+
 static uint32_t tim2_interrupt = 0;
 static uint32_t tim5_interrupt = 0;
 static uint32_t tap_interrupt = 0;
 static uint32_t mode = 0;
 
-void change_mode(void);
-void display_orientation(struct Orientation *orientation);
-void display_led_pulse(struct LED_PWM *led_pwm);
+/* Private Functions ---------------------------------------------------------*/
 
-int main()
-{
-	//Struct to hold orientation data from accelerometer
-	struct Orientation orientation;
-	//Structs for 4 LEDs
-	struct LED_PWM led_pwm_1, led_pwm_2, led_pwm_3, led_pwm_4;
-	
-	//Calls to initialize used peripherals
-	init_accelerometer();
-	init_TIM2();
-	init_EXTI();
-	init_PWM();
-	init_sample_rate_test();
-	
-	//Struct Initialization
-	init_orientation(&orientation);
-	init_LED_PWM(&led_pwm_1, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 0, 1);					// initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
-	init_LED_PWM(&led_pwm_2, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 125, 2);				// initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
-	init_LED_PWM(&led_pwm_3, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 250, 3);				// initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
-	init_LED_PWM(&led_pwm_4, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 375, 4);				// initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
-	
-	while(1) {
-		if (tap_interrupt!=0) {																										//Tap interrupt flag
-			tap_interrupt = 0;																											//reset flag
-			change_mode();																													//change mode from displaying tilt angle to PWM or vice versa
-		}
-		if (tim2_interrupt!=0) {																									//
-			GPIO_ToggleBits(GPIOD, GPIO_Pin_0);
-			tim2_interrupt = 0;
-			display_orientation(&orientation);
-		}
-		if (tim5_interrupt!=0) {																									//Interrupt flag for led intensity change
-			if (mode) {																															//PWM mode
-				tim5_interrupt = 0;																										//reset flag
-				display_led_pulse(&led_pwm_1);																				//flash LEDs
-				display_led_pulse(&led_pwm_2);
-				display_led_pulse(&led_pwm_3);
-				display_led_pulse(&led_pwm_4);
-			}
-		}			
+/** @defgroup Private_Functions
+  * @{
+  */
+
+/**
+  * @brief  Updates LED intensity in pulse mode
+	* @note   This function is necessary to decouple the PWM pulse speed
+	*         from the PWM driving frequency
+	* @param  *led_pwm: LED_PWM struct of an LED
+  * @retval None
+  */
+
+static void display_led_pulse(struct LED_PWM *led_pwm) {
+	if (led_pwm->led_pwm_update_pulse_count >= PWM_UPDATE_INTENSITY_FREQUENCY*led_pwm->pwm_pulse_speed/led_pwm->max_pwm_intensity/1000) {
+		update_led_pwm_intensity_pulse(led_pwm);
+		led_pwm->led_pwm_update_pulse_count = 0;
 	}
+	led_pwm->led_pwm_update_pulse_count++;
 }
 
-void change_mode() {																												//change mode function, 0 = tilt, 1=PWM
+/**
+  * @}
+  */
+
+/* Public Functions ---------------------------------------------------------*/
+
+/** @defgroup Public_Functions
+  * @{
+  */
+
+/**
+  * @brief  Change mode between tilt angle reading to PWM LED pulse
+	* @param  None
+  * @retval None
+  */
+
+void change_mode() {																													//Change mode function, 0 = tilt, 1=PWM
 	if (mode) {
 		mode = 0;
 	} else {
@@ -70,14 +73,20 @@ void change_mode() {																												//change mode function, 0 = tilt
 	}
 }
 
-void display_orientation(struct Orientation *orientation) {																									//receives current calibrated and averaged orientaiton data
-	update_orientation(orientation);																																					//update data
-	printf("%f\t%f\n", orientation->moving_average_pitch.average, orientation->moving_average_roll.average); 	//print to screen
-	if (!mode) {																																															//mode 0, display tilt angle
-		uint32_t new_led_intensities[4];																																				//4 LED intensities in matrix
+/**
+  * @brief  Reads accelerometer to get orientation and updates LEDs to display it
+	* @param  *orientation: pointer to an Orientation struct representing the accelerometer
+  * @retval None
+  */
+
+void display_orientation(struct Orientation *orientation) {
+	update_orientation(orientation);																																													//Update Orientation with new accelerometer values
+	printf("Pitch: %fd\tRoll: %fd\n", orientation->moving_average_pitch.average, orientation->moving_average_roll.average); 	//Print new orientation to debugger stream
+	if (!mode) {																																																							//Check if we're in tilt angle detection mode
+		uint32_t new_led_intensities[4];
 		if (orientation->moving_average_roll.average >= 0) {
-			new_led_intensities[2] = orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;						//intensity based off of ratio of angle to 90deg
-			new_led_intensities[0] = 0;																																						//also ensures that opposing LEDs are not on at the same time
+			new_led_intensities[2] = orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;														//Intensity based off of ratio of angle to 90d
+			new_led_intensities[0] = 0;																																														//Also ensures that opposing LEDs are not on at the same time
 		} else {
 			new_led_intensities[2] = 0;
 			new_led_intensities[0] = -orientation->moving_average_roll.average * MAX_PWM_INTENSITY / 90;					
@@ -89,41 +98,90 @@ void display_orientation(struct Orientation *orientation) {																					
 			new_led_intensities[3] = 0;
 			new_led_intensities[1] = -orientation->moving_average_pitch.average * MAX_PWM_INTENSITY / 90;					
 		}
-		update_led_intensities(new_led_intensities, sizeof(new_led_intensities)/sizeof(new_led_intensities[0]));	//update LEDs
+		update_led_intensities(new_led_intensities, sizeof(new_led_intensities)/sizeof(new_led_intensities[0]), TIM4);								//Update LED intensities
 	}
 }
 
-void display_led_pulse(struct LED_PWM *led_pwm) {																																														//updates intensity at TIM5 interrupt
-	if (led_pwm->led_pwm_update_pulse_count >= PWM_UPDATE_INTENSITY_FREQUENCY*led_pwm->pwm_pulse_speed/led_pwm->max_pwm_intensity/1000) {			//only on desired pulse frequency
-		update_led_pwm_intensity_pulse(led_pwm);
-		led_pwm->led_pwm_update_pulse_count = 0;
+/**
+  * @brief  Main entry point
+	* @param  None
+  * @retval int: Error code
+  */
+
+int main()
+{
+	struct Orientation orientation;																							//Struct to hold orientation data from accelerometer
+	struct LED_PWM led_pwm_1, led_pwm_2, led_pwm_3, led_pwm_4;									//Structs for 4 LEDs
+	
+	//Calls to initialize used peripherals
+	init_accelerometer();																												//Initialize accelerometer
+	init_TIM2();																																//Initialize TIM2 as acclerometer sampling timer
+	init_EXTI();																																//Initialize EXTI for tap detection
+	init_PWM();																																	//Initialize LEDs and HW timer for PWM LED operation
+	init_sample_rate_test();																										//Initalize GPIO for accelerometer sample rate measurement
+	
+	//Struct Initialization
+	init_orientation(&orientation);
+	init_LED_PWM(&led_pwm_1, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 0, 1, TIM4);					//initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
+	init_LED_PWM(&led_pwm_2, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 125, 2, TIM4);				//initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
+	init_LED_PWM(&led_pwm_3, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 250, 3, TIM4);				//initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
+	init_LED_PWM(&led_pwm_4, MAX_PWM_INTENSITY, PWM_PULSE_SPEED, 375, 4, TIM4);				//initialize with values for the specified LED, with intensity, pulse speed, phase, and capture compare register (CCR)
+	
+	while(1) {
+		if (tap_interrupt != 0) {																									//Check if we've received a tap interrupt
+			tap_interrupt = 0;																											//Reset interrupt flag
+			change_mode();																													//Change mode from displaying tilt angle to PWM or vice versa
+		}
+		if (tim2_interrupt != 0) {																								//Check if we've received a TIM2 interrupt
+			tim2_interrupt = 0;																											//Reset interrupt flag
+			GPIO_ToggleBits(GPIOD, GPIO_Pin_0);																			//Toggle sample rate measurement pin
+			display_orientation(&orientation);																			//Do an orientation reading
+		}
+		if (tim5_interrupt != 0) {																								//Check if we've received a TIM5 interrupt
+			tim5_interrupt = 0;																											//Reset interrupt flag
+			if (mode) {																															//Check if we're in PWM pulse mode
+				display_led_pulse(&led_pwm_1);																				//Update LED intensities
+				display_led_pulse(&led_pwm_2);
+				display_led_pulse(&led_pwm_3);
+				display_led_pulse(&led_pwm_4);
+			}
+		}
 	}
-	led_pwm->led_pwm_update_pulse_count++;
 }
 
-void TIM2_IRQHandler(void)																									//
+/**
+  * @brief  IRQ handler for TIM2
+	* @param  None
+  * @retval None
+  */
+
+void TIM2_IRQHandler(void)
 {
-  if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)												//checks whether the specified EXTI line is asserted or not
+  if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)													//Checks interrupt status register to ensure an interrupt is pending
   {
-    TIM_ClearITPendingBit(TIM2, TIM_IT_Update);															//
-		tim2_interrupt++;																												//
+    TIM_ClearITPendingBit(TIM2, TIM_IT_Update);																//Reset interrupt pending bit
+		tim2_interrupt++;																													//Increment TIM2 interrupt flag
   }
 }
 
-void TIM5_IRQHandler(void)																									//periodic update of CCR register, updates intensity
+void TIM5_IRQHandler(void)
 {
-	if (TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET)												//checks whether the specified EXTI line is asserted or not
+	if (TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET)													//Checks interrupt status register to ensure an interrupt is pending
   {
-    TIM_ClearITPendingBit(TIM5, TIM_IT_Update);															//
-		tim5_interrupt++;																												//
+    TIM_ClearITPendingBit(TIM5, TIM_IT_Update);																//Reset interrupt pending bit
+		tim5_interrupt++;																													//Increment TIM5 interrupt flag
   }
 }
 
-void EXTI1_IRQHandler(void)																									//external interrupt, generated by tapping
+void EXTI1_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line1) != RESET)																	//checks whether the specified EXTI line is asserted or not
+  if(EXTI_GetITStatus(EXTI_Line1) != RESET)																		//Checks interrupt status register to ensure an interrupt is pending
   {
-    EXTI_ClearITPendingBit(EXTI_Line1);																			//clear line1 interrupt
-		tap_interrupt++;																												//set flag for tap interrupt
+    EXTI_ClearITPendingBit(EXTI_Line1);																				//Reset interrupt pending bit
+		tap_interrupt++;																													//Increment tap interrupt flag
   }
 }
+
+/**
+  * @}
+  */

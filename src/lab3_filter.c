@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    lab2_filter.c
+  * @file    lab3_filter.c
   * @author  Group 6
   * @version V1.0.0
-  * @date    18-October-2013
+  * @date    1-November-2013
   * @brief   This defines public functions for a simple Linear Moving Average Filter:
 	*           - Insert value into buffer
 	*           - Calculate average of all elements in buffer
@@ -14,9 +14,9 @@
 #include "stm32f4xx.h"
 #include "lab3_filter.h"
 
-/* Moving Average Filter Public Functions ---------------------------------------------------------*/
+/* Public Functions ---------------------------------------------------------*/
 
-/** @defgroup Moving_Average_Filter_Public_Functions
+/** @defgroup Public_Functions
   * @{
   */
 
@@ -57,6 +57,7 @@ void insert_value(struct Moving_Average *moving_average, float new_value) {
   * @param  *moving_average: Pointer to a Moving_Average struct
   * @retval None
   */
+
 void calculate_average(struct Moving_Average *moving_average) {
 	uint32_t i = 0;																																															//Initialize internal variables
 	double sum = 0;

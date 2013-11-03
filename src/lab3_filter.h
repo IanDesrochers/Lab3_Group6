@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    lab2_filter.h
+  * @file    lab3_filter.h
   * @author  Group 6
   * @version V1.0.0
-  * @date    18-October-2013
+  * @date    1-November-2013
   * @brief   This defines public functions for a simple Linear Moving Average Filter:
 	*           - Insert value into buffer
 	*           - Calculate average of all elements in buffer
@@ -14,15 +14,17 @@
 
 #include "stm32f4xx.h"
 
+/* Defines ------------------------------------------------------------------*/
+
+#ifndef MOVING_AVERAGE_FILTER_SIZE
+#define MOVING_AVERAGE_FILTER_SIZE 10																									//Size of moving average circular filter window
+#endif
+
 /* Exported Types ---------------------------------------------------------*/
 
 /** @defgroup Structs
   * @{
-  */ 
-#ifndef MOVING_AVERAGE_FILTER_SIZE
-#define MOVING_AVERAGE_FILTER_SIZE 10																				//Size of moving average circular filter window
-#endif
-
+  */
 
 #ifndef MOVING_AVERAGE_STRUCT
 #define MOVING_AVERAGE_STRUCT
@@ -39,9 +41,9 @@ struct Moving_Average {
   * @}
   */
 
-/* Moving Average Filter Public Functions ---------------------------------------------------------*/
+/* Public Functions ---------------------------------------------------------*/
 
-/** @defgroup Moving_Average_Filter_Public_Functions
+/** @defgroup Public_Functions
   * @{
   */ 
 

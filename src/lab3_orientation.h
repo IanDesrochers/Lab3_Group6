@@ -1,11 +1,22 @@
-#include "stm32f4xx.h"
+/**
+  ******************************************************************************
+  * @file    lab3_orientation.c
+  * @author  Group 6
+  * @version V1.0.0
+  * @date    1-November-2013
+  * @brief   Provides a structure and functionality to implement tilt detection
+  */
 
+/* Includes ------------------------------------------------------------------*/
+
+#include "stm32f4xx.h"
 #include "lab3_filter.h"
+
+/* Defines ------------------------------------------------------------------*/
 
 #ifndef PI
 #define PI 3.14159
 #endif
-
 
 //Calibration Matrix
 #define ACC11 1.0177
@@ -20,11 +31,16 @@
 #define ACC32 -0.0120
 #define ACC33 0.9686
 
-
 //Calibration Offsets
 #define ACC10 18.5581
 #define ACC20 21.9931
 #define ACC30 86.8937
+
+/* Exported Types ---------------------------------------------------------*/
+
+/** @defgroup Structs
+  * @{
+  */
 
 struct Orientation {
 	int32_t rawx;
@@ -41,6 +57,20 @@ struct Orientation {
 	struct Moving_Average moving_average_yaw;
 };
 
+/**
+  * @}
+  */
+
+/* Public Functions ---------------------------------------------------------*/
+
+/** @defgroup Public_Functions
+  * @{
+  */
+
 void update_orientation(struct Orientation *orientation);
 void init_accelerometer(void);
 void init_orientation(struct Orientation *orientation);
+
+/**
+  * @}
+  */
